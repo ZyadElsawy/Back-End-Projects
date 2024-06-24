@@ -1,5 +1,3 @@
-# Postly
-
 # How to install
 
 - Clone this branch
