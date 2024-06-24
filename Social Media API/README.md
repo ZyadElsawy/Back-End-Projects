@@ -1,9 +1,5 @@
 # Postly
 
-- Back-End Devs :
-  - Zyad Mohamed Mohamed Elsawy
-  - Abdelrahman Ahmed Fawzy
-
 # How to install
 
 - Clone this branch
