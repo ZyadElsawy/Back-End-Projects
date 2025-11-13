@@ -4,8 +4,9 @@ exports.getAllTasks = (req, res) => {
   res.send({ message: "getting all tasks" });
 };
 
-exports.createTask = (req, res) => {
-  res.send({ message: "creating tasks" });
+exports.createTask = async (req, res) => {
+  const task = await Task.create(req.body);
+  res.status(201).json({ task });
 };
 
 exports.getSingleTask = (req, res) => {
