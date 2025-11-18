@@ -5,12 +5,14 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 const tasksRoutes = require("./routes/tasks");
-// basic get route
+const errorHandler = require("./middlewares/error-handler");
 
 app.use(express.static("./public"));
 app.use(express.json());
 
 app.use("/api/v1/tasks", tasksRoutes);
+
+app.use(errorHandler);
 
 const start = async () => {
   try {
