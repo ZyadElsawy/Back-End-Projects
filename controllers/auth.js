@@ -26,7 +26,20 @@ const register = async (req, res) => {
   return res.status(201).json({ msg: "user added successfully" });
 };
 
-const login = (req, res) => {};
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const emailExists = await User.findOne({ email: email });
+  console.log(emailExists);
+  if (!emailExists) {
+    return res.status(200).json({ msg: "Incorrect email or password" });
+  }
+  if (password !== emailExists.password) {
+    return res.status(200).json({ msg: "Incorrect email or password" });
+  }
+
+  //   console.log(emailExists.password);
+  return res.json({ msg: "Login Successfull" });
+};
 
 module.exports = {
   register,
