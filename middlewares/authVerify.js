@@ -8,14 +8,18 @@ const verifyAuth = (req, res, next) => {
     jwt.verify(token, "JWT_SECRET", (err, decoded) => {
       if (err) {
         console.log(err);
-        res.json({ msg: "redirecting to login page...." });
+        return res
+          .status(401)
+          .json({ msg: "Authentication failed. Please login." });
       } else {
         console.log(decoded);
         next();
       }
     });
   } else {
-    res.json({ msg: "redirecting to login page...." });
+    return res
+      .status(401)
+      .json({ msg: "Authentication required. Please login." });
   }
 };
 

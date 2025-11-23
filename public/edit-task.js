@@ -22,6 +22,11 @@ const showTask = async () => {
       taskCompletedDOM.checked = true
     }
   } catch (error) {
+    // Check if error is due to authentication
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      window.location.href = 'login.html'
+      return
+    }
     console.log(error)
   }
 }
@@ -54,6 +59,11 @@ editFormDOM.addEventListener('submit', async (e) => {
     formAlertDOM.textContent = `success, edited task`
     formAlertDOM.classList.add('text-success')
   } catch (error) {
+    // Check if error is due to authentication
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      window.location.href = 'login.html'
+      return
+    }
     console.error(error)
     taskNameDOM.value = tempName
     formAlertDOM.style.display = 'block'
