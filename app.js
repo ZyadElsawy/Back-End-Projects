@@ -8,12 +8,13 @@ const port = process.env.PORT || 5000;
 const tasksRoutes = require("./routes/tasks");
 const authRoutes = require("./routes/auth");
 const errorHandler = require("./middlewares/error-handler");
+const verifyAuth = require("./middlewares/authVerify");
 
 app.use(express.static("./public"));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1/tasks", tasksRoutes);
+app.use("/api/v1/tasks", verifyAuth, tasksRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 app.use(errorHandler);
