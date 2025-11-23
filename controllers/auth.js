@@ -1,5 +1,14 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (id, username) => {
+  return jwt.sign({ id, username }, "JWT_SECRET", {
+    expiresIn: maxAge,
+  });
+};
+
 const register = async (req, res) => {
   console.log(req.body);
   const { username, email, password } = req.body;
@@ -16,7 +25,12 @@ const register = async (req, res) => {
     });
     console.log("User added successfully");
     // console.log(user);
-    res.cookie("username", username);
+    const token = createToken(user._id, user.username);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: maxAge * 1000, // Convert to milliseconds
+      sameSite: "strict",
+    });
     return res.status(201).json({ user });
   } catch (err) {
     console.log(err);
@@ -37,7 +51,12 @@ const login = async (req, res) => {
   }
 
   //   console.log(emailExists.password);
-  res.cookie("username", emailExists.username);
+  const token = createToken(emailExists._id, emailExists.username);
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: maxAge * 1000, // Convert to milliseconds
+    sameSite: "strict",
+  });
   return res.json({ msg: "Login Successfull" });
 };
 
