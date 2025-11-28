@@ -1,6 +1,30 @@
 const Task = require("../models/Task");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+
+// const currentUser = (req, res) => {
+//   const token = req.cookies.jwt;
+//   if (token) {
+//     jwt.verify(token, "JWT_SECRET", async (err, decoded) => {
+//       if (err) {
+//         console.log(err);
+//       } else {
+//         const user = await User.findById(decoded.id);
+//         console.log(user);
+//         return user;
+//       }
+//     });
+//   } else {
+//     console.log("Not Logged In");
+//   }
+// };
 
 exports.getAllTasks = async (req, res) => {
+  console.log("before user");
+  // const curr = await currentUser(req, res);
+  console.log(req.user.username);
+  console.log(req.user.email);
+  console.log(req.user.id);
   try {
     const tasks = await Task.find({});
     if (!tasks) {

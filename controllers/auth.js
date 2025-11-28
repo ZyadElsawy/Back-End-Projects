@@ -60,7 +60,13 @@ const login = async (req, res) => {
   return res.json({ msg: "Login Successfull" });
 };
 
+const logout = (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  return res.status(200).json({ msg: "Logout successful" });
+};
+
 module.exports = {
   register,
   login,
+  logout,
 };

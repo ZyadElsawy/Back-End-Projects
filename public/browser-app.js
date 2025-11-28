@@ -3,6 +3,8 @@ const loadingDOM = document.querySelector(".loading-text");
 const formDOM = document.querySelector(".task-form");
 const taskInputDOM = document.querySelector(".task-input");
 const formAlertDOM = document.querySelector(".form-alert");
+const logoutContainerDOM = document.querySelector(".logout-container");
+const logoutBtnDOM = document.querySelector(".logout-btn");
 // Load tasks from /api/tasks
 const showTasks = async () => {
   loadingDOM.style.visibility = "visible";
@@ -13,6 +15,8 @@ const showTasks = async () => {
     if (tasks.length < 1) {
       tasksDOM.innerHTML = '<h5 class="empty-list">No tasks in your list</h5>';
       loadingDOM.style.visibility = "hidden";
+      // Show logout button even when no tasks (user is still logged in)
+      logoutContainerDOM.style.display = "flex";
       return;
     }
     const allTasks = tasks
@@ -37,18 +41,23 @@ const showTasks = async () => {
       })
       .join("");
     tasksDOM.innerHTML = allTasks;
+    // Show logout button when tasks load successfully (user is logged in)
+    logoutContainerDOM.style.display = "flex";
   } catch (error) {
     // Check if error is due to authentication
     if (
       error.response &&
       (error.response.status === 401 || error.response.status === 403)
     ) {
-      // Redirect to login page if not authenticated
+      // Hide logout button and redirect to login page if not authenticated
+      logoutContainerDOM.style.display = "none";
       window.location.href = "login.html";
       return;
     }
     tasksDOM.innerHTML =
       '<h5 class="empty-list">There was an error, please try later....</h5>';
+    // Hide logout button on error
+    logoutContainerDOM.style.display = "none";
   }
   loadingDOM.style.visibility = "hidden";
 };
@@ -109,4 +118,17 @@ formDOM.addEventListener("submit", async (e) => {
     formAlertDOM.style.display = "none";
     formAlertDOM.classList.remove("text-success");
   }, 3000);
+});
+
+// logout functionality
+logoutBtnDOM.addEventListener("click", async () => {
+  try {
+    await axios.get("/api/v1/auth/logout");
+    // Redirect to login page after successful logout
+    window.location.href = "login.html";
+  } catch (error) {
+    console.log(error);
+    // Even if there's an error, redirect to login page
+    window.location.href = "login.html";
+  }
 });
