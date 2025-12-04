@@ -1,11 +1,61 @@
 const Task = require("../models/Task");
 
+const pagination = (req, data) => {};
+
 exports.getAllTasks = async (req, res) => {
   try {
-    // Find all tasks where author matches the current user's ID
-    const tasks = await Task.find({ author: req.user.id });
-    // find() returns an array, so check length instead of truthiness
-    res.status(200).json({ tasks, count: tasks.length });
+    // Extract and validate pagination parameters
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 10));
+
+    // Calculate skip value
+    const skip = (page - 1) * limit;
+
+    // Build query filter
+    const filter = { author: req.user.id };
+
+    // Get total count of tasks (before pagination)
+    const totalTasks = await Task.countDocuments(filter);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalTasks / limit);
+
+    // Handle edge case: page exceeds total pages
+    if (page > totalPages && totalPages > 0) {
+      return res.status(200).json({
+        tasks: [],
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalTasks,
+          tasksPerPage: limit,
+          hasNextPage: false,
+          hasPrevPage: page > 1,
+        },
+      });
+    }
+
+    // Fetch paginated tasks with consistent sorting
+    const tasks = await Task.find(filter)
+      .sort({ createdAt: -1 }) // Sort by newest first for consistent pagination
+      .skip(skip)
+      .limit(limit);
+
+    // Build pagination metadata
+    const pagination = {
+      currentPage: page,
+      totalPages,
+      totalTasks,
+      tasksPerPage: limit,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    };
+
+    res.status(200).json({
+      tasks,
+      count: tasks.length,
+      pagination,
+    });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
