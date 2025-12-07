@@ -505,3 +505,109 @@ form > :last-child {
 .logout-btn i {
   font-size: 0.85rem;
 }
+
+/*************
+   PAGINATION
+*************/
+
+.pagination {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--borderRadius);
+  box-shadow: var(--shadow-2);
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: var(--grey-700);
+  text-align: center;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pagination-btn {
+  cursor: pointer;
+  appearance: none;
+  color: var(--primary-500);
+  background: var(--white);
+  border: 1px solid var(--primary-500);
+  border-radius: var(--borderRadius);
+  letter-spacing: var(--letterSpacing);
+  padding: 0.5rem 0.75rem;
+  transition: var(--transition);
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 2.5rem;
+  justify-content: center;
+}
+
+.pagination-btn:hover:not(.disabled):not(.active) {
+  color: var(--white);
+  background: var(--primary-500);
+  box-shadow: var(--shadow-2);
+}
+
+.pagination-btn.active {
+  color: var(--white);
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+  font-weight: 600;
+}
+
+.pagination-btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  color: var(--grey-600);
+  border-color: var(--grey-400);
+  background: var(--grey-100);
+}
+
+.pagination-btn.disabled:hover {
+  color: var(--grey-600);
+  background: var(--grey-100);
+  box-shadow: none;
+}
+
+.pagination-ellipsis {
+  padding: 0 0.5rem;
+  color: var(--grey-600);
+  font-weight: 600;
+}
+
+.pagination-btn i {
+  font-size: 0.75rem;
+}
+
+@media screen and (max-width: 576px) {
+  .pagination-controls {
+    gap: 0.25rem;
+  }
+  
+  .pagination-btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.85rem;
+    min-width: 2rem;
+  }
+  
+  .pagination-btn:not(.page-number) {
+    font-size: 0.8rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.85rem;
+  }
+}
